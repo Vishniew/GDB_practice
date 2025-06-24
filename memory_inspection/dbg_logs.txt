@@ -1,0 +1,59 @@
+(gdb) break main 
+Breakpoint 1 at 0x555555555155: file memory_inspection.c, line 3.
+(gdb) info breakpoints 
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000555555555155 in main at memory_inspection.c:3
+(gdb) run
+Starting program: /home/packetp/CP/GDB_practice/memory_inspection/a.out 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, main () at memory_inspection.c:3
+3	int main() {
+(gdb) print nums 
+$1 = {-7543, 32767, 100, 0, 4096}
+(gdb) print &nums 
+$2 = (int (*)[5]) 0x7fffffffde10
+(gdb) print msg
+$3 = 0x178bfbff <error: Cannot access memory at address 0x178bfbff>
+(gdb) next
+4	    int nums[5] = {10, 20, 30, 40, 50};
+(gdb) next
+5	    char *msg = "Hello MCU!";
+(gdb) print nums 
+$4 = {10, 20, 30, 40, 50}
+(gdb) print &nums 
+$5 = (int (*)[5]) 0x7fffffffde10
+(gdb) print msg
+$6 = 0x178bfbff <error: Cannot access memory at address 0x178bfbff>
+(gdb) next
+6	    return 0;
+(gdb) print msg
+$7 = 0x555555556004 "Hello MCU!"
+(gdb) x/5d num
+num              num_ifs          num_leaps        num_transitions  num_types        nums             
+(gdb) x/5d num
+num              num_ifs          num_leaps        num_transitions  num_types        nums             
+(gdb) x/5d nums 
+0x7fffffffde10:	10	20	30	40
+0x7fffffffde20:	50
+(gdb) x/5x nums 
+0x7fffffffde10:	0x0000000a	0x00000014	0x0000001e	0x00000028
+0x7fffffffde20:	0x00000032
+(gdb) x/s msg
+0x555555556004:	"Hello MCU!"
+(gdb) print *(nums+2)
+$8 = 30
+(gdb) x/d nums+2
+0x7fffffffde18:	30
+(gdb) q
+A debugging session is active.
+
+	Inferior 1 [process 9922] will be killed.
+
+Quit anyway? (y or n) n
+Not confirmed.
+(gdb) q
+A debugging session is active.
+
+	Inferior 1 [process 9922] will be killed.

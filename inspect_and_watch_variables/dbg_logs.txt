@@ -1,0 +1,89 @@
+GNU gdb (Ubuntu 12.1-0ubuntu1~22.04.2) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./output...
+(gdb) break math
+Breakpoint 1 at 0x115b: file inspect_and_watch_variables.c, line 4.
+(gdb) run
+Starting program: /home/packetp/CP/GDB_practice/inspect_and_watch_variables/output 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, math (x=7, y=3) at inspect_and_watch_variables.c:4
+4           int sum = x + y;
+(gdb) info locals 
+sum = 32767
+diff = 100
+prod = 0
+(gdb) info args
+x = 7
+y = 3
+(gdb) next
+5           int diff = x - y;
+(gdb) next
+6           int prod = x * y;
+(gdb) next
+7           printf("Sum: %d, Diff: %d, Prod: %d\n", sum, diff, prod);
+(gdb) display sum
+1: sum = 10
+(gdb) display diff
+2: diff = 4
+(gdb) display prod 
+3: prod = 21
+(gdb) set var diff = 97
+(gdb) display diff
+4: diff = 97
+(gdb) next
+Sum: 10, Diff: 97, Prod: 21
+8           for(int i=0;i<5;i++)
+1: sum = 10
+2: diff = 97
+3: prod = 21
+4: diff = 97
+(gdb) undisplay 
+Delete all auto-display expressions? (y or n) y
+(gdb) print i
+$1 = -8071
+(gdb) next
+9               printf("%d\n",i);
+(gdb) display i
+5: i = 0
+(gdb) next
+0
+8           for(int i=0;i<5;i++)
+5: i = 0
+(gdb) next
+9               printf("%d\n",i);
+5: i = 1
+(gdb) next
+1
+8           for(int i=0;i<5;i++)
+5: i = 1
+(gdb) next
+9               printf("%d\n",i);
+5: i = 2
+(gdb) set var i=100
+(gdb) next
+100
+8           for(int i=0;i<5;i++)
+5: i = 100
+(gdb) next
+10      }
+(gdb) quit
+A debugging session is active.
+
+        Inferior 1 [process 25089] will be killed.
+
+Quit anyway? (y or n) y
