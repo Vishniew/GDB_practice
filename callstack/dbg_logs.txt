@@ -1,0 +1,35 @@
+(gdb) break third 
+Breakpoint 1 at 0x555555555158: file callstack.c, line 4.
+(gdb) run
+Starting program: /home/packetp/CP/GDB_practice/callstack/a.out 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, third (z=18) at callstack.c:4
+4	    printf("Inside third. z = %d\n", z);
+(gdb) backtrace 
+#0  third (z=18) at callstack.c:4
+#1  0x0000555555555190 in second (y=13) at callstack.c:8
+#2  0x00005555555551af in first (x=3) at callstack.c:12
+#3  0x00005555555551c4 in main () at callstack.c:16
+(gdb) info args 
+z = 18
+(gdb) info locals 
+No locals.
+(gdb) up
+#1  0x0000555555555190 in second (y=13) at callstack.c:8
+8	    third(y + 5);
+(gdb) info locals 
+No locals.
+(gdb) info args 
+y = 13
+(gdb) frame 3
+#3  0x00005555555551c4 in main () at callstack.c:16
+16	    first(3);
+(gdb) frame 1
+#1  0x0000555555555190 in second (y=13) at callstack.c:8
+8	    third(y + 5);
+(gdb) quit
+A debugging session is active.
+
+	Inferior 1 [process 7781] will be killed.
