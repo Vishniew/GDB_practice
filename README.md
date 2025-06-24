@@ -760,4 +760,114 @@ Moves to frame index 2.
 | `frame <n>`       | Jump directly to frame number `n`            |
 
 ---
+# GDB Debugging – Chapter 10: Inspecting Memory
+
+This chapter covers how to examine raw memory in GDB using the `x` command. You’ll be able to inspect arrays, pointers, strings, and bytes directly using addresses.
+
+---
+
+## Sample Program: `chapter10.c`
+
+```c
+#include <stdio.h>
+
+int main() {
+    int nums[5] = {10, 20, 30, 40, 50};
+    char *msg = "Hello Vishnew!";
+    return 0;
+}
+```
+
+---
+
+## Step-by-Step Instructions
+
+### Compile with Debug Info
+
+```bash
+gcc -g chapter10.c -o ch10
+```
+
+### Start GDB and Set Breakpoint
+
+```bash
+gdb ./ch10
+(gdb) break main
+(gdb) run
+```
+
+---
+
+## Printing Addresses of Variables
+
+```gdb
+print nums
+print &nums[0]
+print msg
+```
+
+Expected output:
+
+```
+$1 = (int *) 0x7fffffffe4d0
+$2 = (char *) 0x555555554008 "Hello Vishnew!"
+```
+
+---
+
+## Using `x` to Examine Memory
+
+**Syntax:**
+
+```gdb
+x/NFMT ADDRESS
+```
+
+- **N** = number of items
+- **F** = format (`x`, `d`, `u`, `s`, `c`, etc.)
+- **M** = size (`b`, `h`, `w`, `g`) → byte, halfword, word, giant
+
+---
+
+### Inspect Integer Array
+
+```gdb
+x/5d nums       # View 5 integers in decimal
+x/5x nums       # View 5 integers in hexadecimal
+```
+
+### Inspect String
+
+```gdb
+x/s msg         # View string pointed to by msg
+x/16xb msg      # View 16 bytes at msg in hex format
+```
+
+---
+
+## Pointer Arithmetic Examples
+
+```gdb
+print *(nums + 3)    # nums[3] → 40
+x/d nums+3           # Alternative: view one int
+```
+
+---
+
+## Summary Table
+
+| Command             | Description                                         |
+|---------------------|-----------------------------------------------------|
+| `print nums`        | Show base address of the array                      |
+| `x/5d nums`         | Show 5 integers in decimal                          |
+| `x/5x nums`         | Show 5 integers in hexadecimal                      |
+| `print msg`         | Show address and value of string                    |
+| `x/s msg`           | Display string at the address                       |
+| `x/16xb msg`        | Display 16 bytes at the address in hex              |
+| `print *(nums + 3)` | Show value at index 3 (i.e., nums[3])               |
+| `x/d nums+3`        | Alternate way to view a single int at offset 3      |
+
+---
+
+This chapter helps you explore raw memory deeply, even when variables are not directly visible or in scope.
 
