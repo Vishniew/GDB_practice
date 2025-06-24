@@ -620,4 +620,144 @@ $5 = 20
 | Exit GDB                              | `quit`                       |
 
 ---
+# Chapter 9: Call Stack and Backtrace
+
+This chapter explains how to trace the chain of function calls that led to a specific point in execution using the GDB call stack. It helps you understand the path taken through your code and the values passed between functions.
+
+---
+
+## Sample Program: 
+
+```c
+#include <stdio.h>
+
+void third(int z) {
+    printf("Inside third. z = %d\n", z);
+}
+
+void second(int y) {
+    third(y + 5);
+}
+
+void first(int x) {
+    second(x + 10);
+}
+
+int main() {
+    first(3);
+    return 0;
+}
+```
+
+---
+
+## Step-by-Step GDB Commands
+
+### Compile with Debug Info
+
+```bash
+gcc -g chapter9.c -o ch9
+```
+
+### Launch GDB
+
+```bash
+gdb ./ch9
+```
+
+### Set a Breakpoint at the Deepest Function
+
+```gdb
+break third
+```
+
+### Run the Program
+
+```gdb
+run
+```
+
+Execution stops at the start of the `third()` function.
+
+---
+
+## Inspect the Call Stack
+
+### View the Stack Trace
+
+```gdb
+backtrace
+```
+
+Shows how the current function was reached. Example output:
+
+```
+#0  third (z=18) at chapter9.c:4
+#1  second (y=13) at chapter9.c:8
+#2  first (x=3) at chapter9.c:12
+#3  main () at chapter9.c:16
+```
+
+### View Function Arguments
+
+```gdb
+info args
+```
+
+Displays arguments of the current function (e.g., `z = 18`).
+
+### View Local Variables
+
+```gdb
+info locals
+```
+
+Shows all local variables in the current stack frame.
+
+---
+
+## Navigating the Stack Frames
+
+### Move Up to Caller Frame
+
+```gdb
+up
+```
+
+Moves one frame up (to caller function). You can then inspect its arguments:
+
+```gdb
+info args
+```
+
+### Move Down to Callee Frame
+
+```gdb
+down
+```
+
+Moves back down into the function that was being executed.
+
+### Jump Directly to a Specific Frame
+
+```gdb
+frame 2
+```
+
+Moves to frame index 2.
+
+---
+
+## Summary of Commands
+
+| Command           | Description                                  |
+|-------------------|----------------------------------------------|
+| `backtrace`       | Show all functions in the current call stack |
+| `info args`       | Show function arguments in current frame     |
+| `info locals`     | Show local variables in current frame        |
+| `up`              | Move to the calling function’s frame         |
+| `down`            | Move to the called function’s frame          |
+| `frame <n>`       | Jump directly to frame number `n`            |
+
+---
 
