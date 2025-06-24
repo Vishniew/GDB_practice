@@ -871,3 +871,123 @@ x/d nums+3           # Alternative: view one int
 
 This chapter helps you explore raw memory deeply, even when variables are not directly visible or in scope.
 
+# GDB Debugging – Chapter 11: Watchpoints (Data Breakpoints)
+
+This chapter introduces **watchpoints**, which pause the program whenever a variable's value changes. This is useful for tracking down unexpected modifications to variables.
+
+---
+
+## Sample Program: 
+
+```c
+#include <stdio.h>
+
+int main() {
+    int count = 0;
+
+    for (int i = 0; i < 5; i++) {
+        count += i;
+        printf("i = %d, count = %d\n", i, count);
+    }
+
+    return 0;
+}
+```
+
+---
+
+## Step-by-Step Instructions
+
+### Compile the Program
+
+```bash
+gcc -g chapter11.c -o ch11
+```
+
+### Start GDB and Set Breakpoint
+
+```bash
+gdb ./ch11
+(gdb) break main
+(gdb) run
+```
+
+Execution stops at the beginning of `main()`.
+
+---
+
+## Add a Watchpoint
+
+```gdb
+watch count
+```
+
+This sets a **hardware watchpoint** that stops execution when the value of `count` changes.
+
+---
+
+## Continue Execution
+
+```gdb
+continue
+```
+
+Each time `count` is modified, GDB will pause and show:
+
+```
+Hardware watchpoint 1: count
+
+Old value = 0
+New value = 1
+```
+
+You can then inspect context:
+
+```gdb
+list
+print i
+```
+
+Continue again:
+
+```gdb
+continue
+```
+
+GDB will repeat this each time `count` changes.
+
+---
+
+## Manage Watchpoints
+
+### Delete Watchpoint
+
+```gdb
+delete 1
+```
+
+### View Watchpoints
+
+```gdb
+info breakpoints
+```
+
+This lists all active breakpoints and watchpoints.
+
+---
+
+## Summary Table
+
+| Command              | Description                                       |
+|----------------------|---------------------------------------------------|
+| `watch var`          | Pause when variable `var` changes                 |
+| `continue`           | Resume execution and wait for next watch trigger |
+| `list`               | View nearby source code                          |
+| `print var`          | Show value of a variable                         |
+| `delete <n>`         | Delete watchpoint number `n`                     |
+| `info breakpoints`   | List all breakpoints and watchpoints             |
+
+---
+
+Watchpoints are extremely helpful for catching silent bugs, unexpected overwrites, and tracking how values evolve over time.
+
