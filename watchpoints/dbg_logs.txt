@@ -1,0 +1,90 @@
+(gdb) break main
+Breakpoint 1 at 0x555555555155: file watchpoints.c, line 4.
+(gdb) run
+Starting program: /home/packetp/CP/GDB_practice/watchpoints/a.out 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, main () at watchpoints.c:4
+4	    int count = 0;
+(gdb) watch count 
+Hardware watchpoint 2: count
+(gdb) continue 
+Continuing.
+
+Hardware watchpoint 2: count
+
+Old value = 1431654496
+New value = 0
+main () at watchpoints.c:6
+6	    for (int i = 0; i < 5; i++) {
+(gdb) list
+1	#include <stdio.h>
+2	
+3	int main() {
+4	    int count = 0;
+5	
+6	    for (int i = 0; i < 5; i++) {
+7	        count += i;
+8	        printf("i = %d, count = %d\n", i, count);
+9	    }
+10	
+(gdb) printi
+Undefined command: "printi".  Try "help".
+(gdb) print i
+$1 = 21845
+(gdb) continue
+Continuing.
+i = 0, count = 0
+
+Hardware watchpoint 2: count
+
+Old value = 0
+New value = 1
+main () at watchpoints.c:8
+8	        printf("i = %d, count = %d\n", i, count);
+(gdb) continue 
+Continuing.
+i = 1, count = 1
+
+Hardware watchpoint 2: count
+
+Old value = 1
+New value = 3
+main () at watchpoints.c:8
+8	        printf("i = %d, count = %d\n", i, count);
+(gdb) continue 
+Continuing.
+i = 2, count = 3
+
+Hardware watchpoint 2: count
+
+Old value = 3
+New value = 6
+main () at watchpoints.c:8
+8	        printf("i = %d, count = %d\n", i, count);
+(gdb) continue 
+Continuing.
+i = 3, count = 6
+
+Hardware watchpoint 2: count
+
+Old value = 6
+New value = 10
+main () at watchpoints.c:8
+8	        printf("i = %d, count = %d\n", i, count);
+(gdb) continue 
+Continuing.
+i = 4, count = 10
+
+Watchpoint 2 deleted because the program has left the block in
+which its expression is valid.
+0x00007ffff7c29d90 in __libc_start_call_main (main=main@entry=0x555555555149 <main>, argc=argc@entry=1, argv=argv@entry=0x7fffffffdf68) at ../sysdeps/nptl/libc_start_call_main.h:58
+58	../sysdeps/nptl/libc_start_call_main.h: No such file or directory.
+(gdb) delete 1
+(gdb) info breakpoints 
+No breakpoints or watchpoints.
+(gdb) q
+A debugging session is active.
+
+	Inferior 1 [process 10992] will be killed.
